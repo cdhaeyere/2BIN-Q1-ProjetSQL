@@ -44,14 +44,27 @@ public class ApplicationEtudiante {
     public void start() {
         int option = 0;
 
-        do {
+        while (true) {
             System.out.println("==================== Application Etudiante ====================");
             System.out.println("1. Se connecter");
             System.out.println("2. Fermer l'application");
             System.out.println("==============================================");
             System.out.println("Entrez votre choix: ");
 
-            option = Integer.parseInt(scanner.nextLine());
+            try {
+                option = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur de saisie");
+                continue;
+            }
+
+            if (option == 0) break;
+
+            if (option < 0 || option > 2) {
+                System.out.println("Erreur: Veuillez entrer un nombre entre 1 et 2");
+                continue;
+            }
+
             switch (option) {
                 case 1: {
                     seConnecter();
@@ -63,7 +76,7 @@ public class ApplicationEtudiante {
                     break;
                 }
             }
-        } while(option != 1 && option != 2);
+        }
     }
 
     private void seConnecter() {
@@ -98,7 +111,7 @@ public class ApplicationEtudiante {
 
     private void menu(){
         int option;
-        do {
+        while (true) {
             System.out.println("==================== Menu ====================");
             System.out.println("1. Visualiser mes cours");
             System.out.println("2. Intégrer un groupe");
@@ -110,7 +123,19 @@ public class ApplicationEtudiante {
             System.out.println("==============================================");
             System.out.println("Entrez votre choix: ");
 
-            option = Integer.parseInt(scanner.nextLine());
+            try {
+                option = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur: Veuillez entrer un nombre");
+                continue;
+            }
+
+            if (option == 0) break;
+
+            if (option < 0 || option > 7) {
+                System.out.println("Erreur: Veuillez entrer un nombre entre 1 et 7");
+                continue;
+            }
 
             switch (option){
                 case 1: {
@@ -142,8 +167,10 @@ public class ApplicationEtudiante {
                     System.exit(0);
                     break;
                 }
+                default:
+                    break;
             }
-        } while(option >= 1 && option <= 7);
+        }
     }
 
     private void visualiserCour() {
