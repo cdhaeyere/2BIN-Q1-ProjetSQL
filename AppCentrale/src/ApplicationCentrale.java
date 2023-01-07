@@ -113,6 +113,12 @@ public class ApplicationCentrale {
                     break;
             }
         }
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void validerGroupes() {
