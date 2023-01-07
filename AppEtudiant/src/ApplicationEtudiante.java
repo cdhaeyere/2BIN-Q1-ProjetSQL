@@ -86,24 +86,25 @@ public class ApplicationEtudiante {
 
         System.out.println("Entrez votre mot de passe :");
         String mdp = scanner.nextLine();
+
         try {
             connecter.setString(1,e_mail);
         } catch (SQLException e) {
             System.out.println("Erreur lors de la connexion de l'etudiant");
         }
-        try (ResultSet resultSet = connecter.executeQuery()) {
 
+        try (ResultSet resultSet = connecter.executeQuery()) {
             if (resultSet.next()) {
                 if (BCrypt.checkpw(mdp, resultSet.getString("connecter_etudiant").split(",")[1].replace(")",""))) {
                     idEtudiant = Integer.parseInt(resultSet.getString("connecter_etudiant").split(",")[0].replace("(",""));
                     menu();
                 } else {
                     System.out.println("mots de passe ou e-mail invalide");
-                    System.exit(1);
+                    seConnecter();
                 }
             } else {
                 System.out.println("mots de passe ou e-mail invalide");
-                System.exit(1);
+                seConnecter();
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
