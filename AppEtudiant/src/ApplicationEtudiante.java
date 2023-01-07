@@ -72,6 +72,7 @@ public class ApplicationEtudiante {
                 }
                 case 2: {
                     System.out.println("Fermeture de l'application");
+                    this.close();
                     System.exit(0);
                     break;
                 }
@@ -164,12 +165,21 @@ public class ApplicationEtudiante {
                 }
                 case 7: {
                     System.out.println("Fermeture de l'application");
+                    this.close();
                     System.exit(0);
                     break;
                 }
                 default:
                     break;
             }
+        }
+    }
+
+    private void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la fermeture de la connexion");
         }
     }
 
