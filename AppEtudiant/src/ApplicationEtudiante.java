@@ -184,8 +184,8 @@ public class ApplicationEtudiante {
     }
 
     private void visualiserCour() {
+        System.out.println("========================== Visualiser mes cours =======================");
         try {
-            System.out.println("========================== Visualiser mes cours =======================");
             visualiserCoursEtudiant.setInt(1,idEtudiant);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -201,13 +201,19 @@ public class ApplicationEtudiante {
     }
 
     private void insererEtudiantGroupe() {
-        try {
-            System.out.println("================================= Intégrer un groupe ==============================");
-            System.out.println("Numero du projet: ?");
-            String idProjet = scanner.nextLine();
-            System.out.println("Numero du groupe: ?");
-            int numGroupe = Integer.parseInt(scanner.nextLine());
+        System.out.println("================================= Intégrer un groupe ==============================");
+        System.out.println("Numero du projet: ?");
+        String idProjet = scanner.nextLine();
 
+        int numGroupe = 0;
+        try {
+            System.out.println("Numero du groupe: ?");
+            numGroupe = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur: Veuillez entrer un nombre");
+            return;
+        }
+        try {
             ajouterEtudiantGroupe.setInt(1,idEtudiant);
             ajouterEtudiantGroupe.setString(2,idProjet);
             ajouterEtudiantGroupe.setInt(3,numGroupe);
@@ -225,27 +231,26 @@ public class ApplicationEtudiante {
     }
 
     private void quitterGroupe() {
-        try {
-            System.out.println("================================= Quitter un groupe ==============================");
-            System.out.println("Numero du projet: ?");
-            String idProjet = scanner.nextLine();
+        System.out.println("================================= Quitter un groupe ==============================");
+        System.out.println("Numero du projet: ?");
+        String idProjet = scanner.nextLine();
 
+        try {
             retirerEtudiantGroupe.setInt(1,idEtudiant);
             retirerEtudiantGroupe.setString(2,idProjet);
 
             retirerEtudiantGroupe.executeQuery();
-            System.out.println("Supression effectuée");
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
+        System.out.println("Supression effectuée");
     }
 
     private void visualiserProjets() {
-        try {
-            System.out.println("================================= Visualiser mes projets ==============================");
+        System.out.println("================================= Visualiser mes projets ==============================");
 
+        try {
             visualiserProjetsEtudiant.setInt(1, idEtudiant);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -261,9 +266,9 @@ public class ApplicationEtudiante {
     }
 
     private void visualiserProjetSansGroupe() {
-        try {
-            System.out.println("============================ Visualiser les projets sans groupe ==============================");
+        System.out.println("============================ Visualiser les projets sans groupe ==============================");
 
+        try {
             visualiserProjetsEtudiantSansGroupe.setInt(1,idEtudiant);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -279,11 +284,11 @@ public class ApplicationEtudiante {
     }
 
     private void visualiserGroupesNonComplets() {
-        try {
-            System.out.println("============================ Visualiser les groupes incomplets ==============================");
-            System.out.println("Numero du projet: ?");
-            String idProjet = scanner.nextLine();
+        System.out.println("============================ Visualiser les groupes incomplets ==============================");
+        System.out.println("Numero du projet: ?");
+        String idProjet = scanner.nextLine();
 
+        try {
             visualiserGroupesIncomplets.setString(1,idProjet);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
