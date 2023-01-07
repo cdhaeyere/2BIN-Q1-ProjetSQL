@@ -176,12 +176,12 @@ public class ApplicationCentrale {
         try (ResultSet resultSet = visualiserProjets.executeQuery()) {
             System.out.println("========================= Visualiser tous les projets ==========================");
             while (resultSet.next()) {
-                System.out.println("=============================== Projet " + resultSet.getString("identifiant_projet") + " =========================================");
+                System.out.println("=============================== Projet " + resultSet.getInt("identifiant_projet") + " =========================================");
                 System.out.println("Nom: " + resultSet.getString("nom"));
                 System.out.println("Code cours: " + resultSet.getString("code_cours"));
-                System.out.println("Nombre de groupes: " + resultSet.getString("nbr_groupes"));
-                System.out.println("Nombre de groupes complets: " + resultSet.getString("nbr_groupes_complet"));
-                System.out.println("Nombre de groupes validés: " + resultSet.getString("nbr_groupes_valide"));
+                System.out.println("Nombre de groupes: " + resultSet.getInt("nbr_groupes"));
+                System.out.println("Nombre de groupes complets: " + resultSet.getInt("nbr_groupes_complet"));
+                System.out.println("Nombre de groupes validés: " + resultSet.getInt("nbr_groupes_valide"));
                 System.out.println("==================================================================================");
             }
         } catch (SQLException e) {
@@ -195,7 +195,7 @@ public class ApplicationCentrale {
             while (resultSet.next()) {
                 System.out.println("===============================" + resultSet.getString("code_cours") + "=========================================");
                 System.out.println("Nom: " + resultSet.getString("nom"));
-                System.out.println("Projets: " + resultSet.getString("coalesce"));
+                System.out.println("Projets: " + resultSet.getInt("coalesce"));
                 System.out.println("==================================================================================");
             }
         } catch (SQLException e) {
