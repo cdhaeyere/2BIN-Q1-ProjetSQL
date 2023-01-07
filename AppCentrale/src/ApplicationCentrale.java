@@ -73,7 +73,7 @@ public class ApplicationCentrale {
 
             if (choix == 0) break;
 
-            if (choix < 0 || choix > 10) {
+            if (choix < 0 || choix > 11) {
                 System.out.println("Erreur: Veuillez entrer un nombre entre 1 et 11");
                 continue;
             }
@@ -109,11 +109,18 @@ public class ApplicationCentrale {
                 case 10:
                     validerGroupes();
                     break;
+                case 11:
+                    System.out.println("Fermeture de l'application");
+                    this.close();
+                    System.exit(0);
+                    break;
                 default:
                     break;
             }
         }
+    }
 
+    private void close() {
         try {
             connection.close();
         } catch (SQLException e) {
@@ -122,48 +129,54 @@ public class ApplicationCentrale {
     }
 
     private void validerGroupes() {
+        System.out.println("============================ Valider tous les groupes d'un projet ============================");
+        System.out.print("Entrez le code du projet: ");
+        String codeProjet = scanner.nextLine();
+
         try {
-            System.out.println("============================ Valider tous les groupes d'un projet ============================");
-            System.out.print("Entrez le code du projet: ");
-            String codeProjet = scanner.nextLine();
-
             validerGroupesProjet.setString(1, codeProjet);
-
             validerGroupesProjet.execute();
-
-            System.out.println("Tous les groupes du projet " + codeProjet + " ont été validés");
-            System.out.println("==============================================================================================");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("Tous les groupes du projet " + codeProjet + " ont été validés");
+        System.out.println("==============================================================================================");
     }
 
     private void validerGroupe() {
-        try {
-            System.out.println("================================= Valider un groupe ==============================");
-            System.out.print("Entrez l'id du projet: ");
-            String idProjet = scanner.nextLine();
-            System.out.print("Entrez le numero du groupe: ");
-            int numeroGroupe = Integer.parseInt(scanner.nextLine());
+        System.out.println("================================= Valider un groupe ==============================");
+        System.out.print("Entrez l'id du projet: ");
+        String idProjet = scanner.nextLine();
 
+        int numeroGroupe = 0;
+        try {
+            System.out.print("Entrez le numero du groupe: ");
+            numeroGroupe = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur: Veuillez entrer un nombre");
+            validerGroupes();
+        }
+
+        try {
             validerGroupeProjet.setString(1, idProjet);
             validerGroupeProjet.setInt(2, numeroGroupe);
 
             validerGroupeProjet.execute();
-
-            System.out.println("Le groupe a été validé avec succès");
-            System.out.println("==================================================================================");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("Le groupe a été validé avec succès");
+        System.out.println("==================================================================================");
     }
 
     private void visualiserGroupes() {
-        try {
-            System.out.println("========================== Visualiser groupes d'un projet =======================");
-            System.out.print("Entrez le code du projet: ");
-            String codeProjet = scanner.nextLine();
+        System.out.println("========================== Visualiser groupes d'un projet =======================");
+        System.out.print("Entrez le code du projet: ");
+        String codeProjet = scanner.nextLine();
 
+        try {
             visualiserGroupesProjet.setString(1, codeProjet);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -179,8 +192,8 @@ public class ApplicationCentrale {
     }
 
     private void visualiserProjets() {
+        System.out.println("========================= Visualiser tous les projets ==========================");
         try (ResultSet resultSet = visualiserProjets.executeQuery()) {
-            System.out.println("========================= Visualiser tous les projets ==========================");
             while (resultSet.next()) {
                 System.out.println("=============================== Projet " + resultSet.getInt("identifiant_projet") + " =========================================");
                 System.out.println("Nom: " + resultSet.getString("nom"));
@@ -196,8 +209,8 @@ public class ApplicationCentrale {
     }
 
     private void visualiserCours() {
+        System.out.println("======================= Visualiser les cours avec ses projets ========================");
         try (ResultSet resultSet = visualiserCours.executeQuery()) {
-            System.out.println("======================= Visualiser les cours avec ses projets ========================");
             while (resultSet.next()) {
                 System.out.println("===============================" + resultSet.getString("code_cours") + "=========================================");
                 System.out.println("Nom: " + resultSet.getString("nom"));
@@ -210,96 +223,101 @@ public class ApplicationCentrale {
     }
 
     private void creerGroupes() {
-        try {
-            System.out.println("================================= Créer des groupes =================================");
-            System.out.println("Entrer l'id du projet: ");
-            String idProjet = scanner.nextLine();
-            System.out.println("Entrer le nombre de groupes: ");
-            int nbGroupes = Integer.parseInt(scanner.nextLine());
-            System.out.println("Entrer le nombre d'étudiants par groupe: ");
-            int nbEtudiants = Integer.parseInt(scanner.nextLine());
+        System.out.println("================================= Créer des groupes =================================");
+        System.out.println("Entrer l'id du projet: ");
+        String idProjet = scanner.nextLine();
 
+        int nbGroupes = 0;
+        int nbEtudiants = 0;
+        try {
+            System.out.println("Entrer le nombre de groupes: ");
+            nbGroupes = Integer.parseInt(scanner.nextLine());
+            System.out.println("Entrer le nombre d'étudiants par groupe: ");
+            nbEtudiants = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur: Veuillez entrer un nombre");
+            creerGroupes();
+        }
+
+        try {
             creerGroupes.setString(1, idProjet);
             creerGroupes.setInt(2, nbGroupes);
             creerGroupes.setInt(3, nbEtudiants);
 
             creerGroupes.execute();
-
-            System.out.println("Groupes créés avec succès");
-            System.out.println("===================================================================================");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("Groupes créés avec succès");
+        System.out.println("===================================================================================");
     }
 
     private void creerProjet() {
+        System.out.println("================================ Création d'un projet =============================");
+        System.out.println("Entrez l'identifiant du projet: ");
+        String idProjet = scanner.nextLine();
+
+        System.out.println("Entrez le nom du projet: ");
+        String nomProjet = scanner.nextLine();
+
+        System.out.println("Entrez la date de début du projet (YYYY-MM-DD): ");
+        Date dateDebut = Date.valueOf(scanner.nextLine());
+
+        System.out.println("Entrez la date de fin du projet (YYYY-MM-DD): ");
+        Date dateFin = Date.valueOf(scanner.nextLine());
+
+        System.out.println("Entrez le code du cours: ");
+        String codeCours = scanner.nextLine();
+
         try {
-            System.out.println("================================ Création d'un projet =============================");
-            System.out.println("Entrez l'identifiant du projet: ");
-            String idProjet = scanner.nextLine();
-
-            System.out.println("Entrez le nom du projet: ");
-            String nomProjet = scanner.nextLine();
-
-            System.out.println("Entrez la date de début du projet (YYYY-MM-DD): ");
-            String dateDebut = scanner.nextLine();
-
-            System.out.println("Entrez la date de fin du projet (YYYY-MM-DD): ");
-            String dateFin = scanner.nextLine();
-
-            System.out.println("Entrez le code du cours: ");
-            String codeCours = scanner.nextLine();
-
-            Date dateDebutProjet = Date.valueOf(dateDebut);
-            Date dateFinProjet = Date.valueOf(dateFin);
-
             ajouterProjet.setString(1, idProjet);
             ajouterProjet.setString(2, nomProjet);
-            ajouterProjet.setDate(3, dateDebutProjet);
-            ajouterProjet.setDate(4, dateFinProjet);
+            ajouterProjet.setDate(3, dateDebut);
+            ajouterProjet.setDate(4, dateFin);
             ajouterProjet.setString(5, codeCours);
 
             ajouterProjet.execute();
-
-            System.out.println("Projet ajouté avec succès");
-            System.out.println("==================================================================================");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("Projet ajouté avec succès");
+        System.out.println("==================================================================================");
     }
 
     private void inscrireEtudiant() {
-        try {
-            System.out.println("================================ Inscrire un étudiant =============================");
-            System.out.println("Entrez l'email de l'étudiant: ");
-            String email = scanner.nextLine();
-            System.out.println("Entrez le code du cours: ");
-            String code = scanner.nextLine();
+        System.out.println("================================ Inscrire un étudiant =============================");
+        System.out.println("Entrez l'email de l'étudiant: ");
+        String email = scanner.nextLine();
+        System.out.println("Entrez le code du cours: ");
+        String code = scanner.nextLine();
 
+        try {
             inscrireEtudiantAuCours.setString(1, email);
             inscrireEtudiantAuCours.setString(2, code);
 
             inscrireEtudiantAuCours.execute();
-
-            System.out.println("L'étudiant a été inscrit au cours avec succès!");
-            System.out.println("==================================================================================");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("L'étudiant a été inscrit au cours avec succès!");
+        System.out.println("==================================================================================");
     }
 
     private void ajouterEtudiant() {
-        try {
-            System.out.println("================================ Ajouter un étudiant ==============================");
-            System.out.println("Entrez le nom de l'étudiant: ");
-            String nom = scanner.nextLine();
-            System.out.println("Entrez le prénom de l'étudiant: ");
-            String prenom = scanner.nextLine();
-            System.out.println("Entrez l'email de l'étudiant: ");
-            String email = scanner.nextLine();
-            System.out.println("Entrez le mot de passe de l'étudiant: ");
-            String motDePasse = scanner.nextLine();
+        System.out.println("================================ Ajouter un étudiant ==============================");
+        System.out.println("Entrez le nom de l'étudiant: ");
+        String nom = scanner.nextLine();
+        System.out.println("Entrez le prénom de l'étudiant: ");
+        String prenom = scanner.nextLine();
+        System.out.println("Entrez l'email de l'étudiant: ");
+        String email = scanner.nextLine();
+        System.out.println("Entrez le mot de passe de l'étudiant: ");
+        String motDePasse = scanner.nextLine();
 
+        try {
             String sel = BCrypt.gensalt();
             motDePasse = BCrypt.hashpw(motDePasse, sel);
 
@@ -309,37 +327,45 @@ public class ApplicationCentrale {
             ajouterEtudiant.setString(4, motDePasse);
 
             ajouterEtudiant.execute();
-
-            System.out.println("L'étudiant a été ajouté avec succès");
-            System.out.println("==================================================================================");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("L'étudiant a été ajouté avec succès");
+        System.out.println("==================================================================================");
     }
 
     private void ajouterCours() {
-        try {
-            System.out.println("================================ Ajouter un cours =================================");
-            System.out.println("Entrez le code du cours: ");
-            String codeCours = scanner.nextLine();
-            System.out.println("Entrez le nom du cours: ");
-            String nomCours = scanner.nextLine();
-            System.out.println("Entrez le bloc du cours: ");
-            int blocCours = Integer.parseInt(scanner.nextLine());
-            System.out.println("Entrez le nombre de crédits du cours: ");
-            int creditsCours = Integer.parseInt(scanner.nextLine());
+        System.out.println("================================ Ajouter un cours =================================");
+        System.out.println("Entrez le code du cours: ");
+        String codeCours = scanner.nextLine();
+        System.out.println("Entrez le nom du cours: ");
+        String nomCours = scanner.nextLine();
 
+        int blocCours = 0;
+        int creditsCours = 0;
+        try {
+            System.out.println("Entrez le bloc du cours: ");
+            blocCours = Integer.parseInt(scanner.nextLine());
+            System.out.println("Entrez le nombre de crédits du cours: ");
+            creditsCours = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Erreur: Veuillez entrer un nombre");
+            ajouterCours();
+        }
+
+        try {
             ajouterCours.setString(1, codeCours);
             ajouterCours.setString(2, nomCours);
             ajouterCours.setInt(3, blocCours);
             ajouterCours.setInt(4, creditsCours);
 
             ajouterCours.execute();
-
-            System.out.println("Le cours a été ajouté avec succès");
-            System.out.println("===================================================================================");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("Le cours a été ajouté avec succès");
+        System.out.println("===================================================================================");
     }
 }
