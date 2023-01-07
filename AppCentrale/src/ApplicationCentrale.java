@@ -48,7 +48,7 @@ public class ApplicationCentrale {
 
     public void start() throws SQLException {
         int choix = 0;
-        do {
+        while (true) {
             System.out.println("============================ Application Centrale ============================");
             System.out.println("1. Ajouter un cours");
             System.out.println("2. Ajouter un étudiant");
@@ -63,7 +63,20 @@ public class ApplicationCentrale {
             System.out.println("11. Fermer l'application");
             System.out.println("==============================================================================");
             System.out.print("Entrez votre choix: ");
-            choix = Integer.parseInt(scanner.nextLine());
+
+            try {
+                choix = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur: Veuillez entrer un nombre");
+                continue;
+            }
+
+            if (choix == 0) break;
+
+            if (choix < 0 || choix > 10) {
+                System.out.println("Erreur: Veuillez entrer un nombre entre 1 et 11");
+                continue;
+            }
 
             switch (choix) {
                 case 1:
@@ -96,16 +109,10 @@ public class ApplicationCentrale {
                 case 10:
                     validerGroupes();
                     break;
-                case 11:
-                    System.out.println("Fermeture de l'application en cours...");
-                    connection.close();
-                    System.exit(0);
-                    break;
                 default:
-                    System.out.println("Choix invalide");
                     break;
             }
-        } while (choix >= 1 && choix <= 11);
+        }
     }
 
     private void validerGroupes() {
