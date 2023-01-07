@@ -238,13 +238,17 @@ public class ApplicationEtudiante {
         try {
             retirerEtudiantGroupe.setInt(1,idEtudiant);
             retirerEtudiantGroupe.setString(2,idProjet);
-
-            retirerEtudiantGroupe.executeQuery();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("Supression effectuée");
+        try (ResultSet resultSet = retirerEtudiantGroupe.executeQuery()) {
+            if (resultSet.next()){
+                System.out.println("Suppression réussie");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void visualiserProjets() {
